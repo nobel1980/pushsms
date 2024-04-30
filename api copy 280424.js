@@ -26,33 +26,12 @@ cron.schedule('* * * * *', async () => {
   try {
     // Get JSON data from Oracle database table
     const connection = await oracledb.getConnection(dbConfig);
-    const result = await connection.execute(`SELECT RECPTNO, LPAD(MOBILE, 13, '88') AS MOBILE, MSG,
-        DECODE(RPAD(MOBILE, 3),'017','GP','013','GP','019','BL', '014','BL', '015','TELETALK','018','ROBI', '016','ROBI','OTHER') AS OPERATOR  
-        FROM  SMS.SMSPUSH 
-        WHERE STATUS = 'PROCESSING' AND ROWNUM <=5`,
+    const result = await connection.execute(`SELECT RECPTNO, LPAD(MOBILE, 13, '88') AS MOBILE, MSG  FROM  SMS.SMSPUSH WHERE STATUS = 'PROCESSING' AND ROWNUM <=1`,
     [],
     { outFormat: oracledb.OUT_FORMAT_OBJECT });
     const data = result.rows;
-    // console.log(data);
-    // exit;
-
-    const operator_status= {
-      gp: "true",
-      bl: "true",
-      robi: "true",
-      default: "gp",
-    };
-    
-    //console.log(operator.gp);
-
-
-    const rows_data= data.map(obj => {
-      console.log(obj.OPERATOR);
-      console.log(operator_status.gp);
-    });
-    console.log(rows_data);
+    console.log(data);
     exit;
-
     const rows = data.map(obj => {
       const username = "FAREAST";
       const password = "F$res#L1f&6754";  
